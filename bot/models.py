@@ -1,6 +1,13 @@
 from sqlalchemy import Column, Integer, String, Text, ARRAY, Float
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import declarative_base, mapped_column
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from bot.config import settings
+
+engine = create_engine(settings.DATABASE_URL)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 Base = declarative_base()
 
