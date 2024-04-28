@@ -5,7 +5,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 
 from bot.config import settings
-from bot.models import User
+from bot.models import User,session
 from bot.assistant import get_answer, save_target
 from bot.voice import transcribe_audio, generate_audio
 from bot.photo_recognition import recognize_food
@@ -28,13 +28,11 @@ class Form(StatesGroup):
     photo = State()
 
 
-
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     await message.answer("Привет! Я бот-помощник по питанию. Какова твоя цель?")
     await Form.target.set()
     send_event("bot_started", message.from_user.id)
-
 
 
 @dp.message_handler(state=Form.target)
@@ -51,7 +49,6 @@ async def process_target(message: types.Message, state: FSMContext):
         await message.answer("Извини, я не понял твою цель. Попробуй еще раз.")
 
 
-
 @dp.message_handler(state=Form.query, content_types=types.ContentTypes.TEXT)
 async def process_query(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
@@ -61,7 +58,6 @@ async def process_query(message: types.Message, state: FSMContext):
     answer = await get_answer(query, target)
     await message.answer(answer)
     send_event("query_asked", user_id, {"query": query, "target": target})
-
 
 
 @dp.message_handler(state=Form.query, content_types=types.ContentTypes.VOICE)

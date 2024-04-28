@@ -9,7 +9,7 @@ openai.api_key = settings.OPENAI_API_KEY
 embeddings = OpenAIEmbeddings()
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
-with open("advice.docx") as f:
+with open("advice.txt") as f:
     advice_text = f.read()
 
 advice_docs = text_splitter.split_text(advice_text)
