@@ -13,12 +13,16 @@ advice_vectors = FAISS.load_local("advice_vectors", embeddings)
 llm = OpenAI(temperature=0)
 qa = ConversationalRetrievalChain.from_llm(llm, advice_vectors.as_retriever())
 
-
 async def get_answer(query, user_id):
     metadata = {"user_id": user_id}
     result = await qa.run(query, metadata=metadata)
     return result
 
+
+async def get_answer(query, user_id):
+    metadata = {"user_id": user_id}
+    result = await qa.run(query, metadata=metadata)
+    return result
 
 async def save_target(user, target):
     texts = [f"Моя цель: {target}"]
