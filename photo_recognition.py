@@ -1,6 +1,7 @@
 import openai
-from config import settings
+from config import Settings
 
+settings = Settings()
 openai.api_key = settings.OPENAI_API_KEY
 
 

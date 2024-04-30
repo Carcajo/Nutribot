@@ -4,21 +4,22 @@ from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 
-from bot.config import settings
-from bot.models import User,session
-from bot.assistant import get_answer, save_target
-from bot.voice import transcribe_audio, generate_audio
-from bot.photo_recognition import recognize_food
-from bot.amplitude import send_event
-from bot.state import get_state, set_state
-from bot.validator import validate_target
+from config import Settings
+from models import User, session
+from assistant import get_answer
+from voice import transcribe_audio, generate_audio
+from photo_recognition import recognize_food
+from amplit import send_event
+from validator import validate_target
+
+settings = Settings()
 
 
 logging.basicConfig(level=logging.INFO)
 
 
-bot = Bot(token=settings.TELEGRAM_BOT_TOKEN)
-storage = RedisStorage2()
+bot = Bot(token=settings.BOT_TOKEN)
+storage = RedisStorage2(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 dp = Dispatcher(bot, storage=storage)
 
 
@@ -41,7 +42,6 @@ async def process_target(message: types.Message, state: FSMContext):
     if validate_target(target):
         user = User(id=message.from_user.id, username=message.from_user.username, target=target)
         await user.save(session)
-        await save_target(user, target)
         await state.update_data(target=target)
         await message.answer(f"Отлично, твоя цель: {target}. Задавай свой вопрос!")
         await Form.query.set()
@@ -73,7 +73,6 @@ async def process_voice(message: types.Message, state: FSMContext):
     send_event("voice_query_asked", user_id, {"query": transcribed_text, "target": target})
 
 
-
 @dp.message_handler(state=Form.query, content_types=types.ContentTypes.PHOTO)
 async def process_photo(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
@@ -84,7 +83,6 @@ async def process_photo(message: types.Message, state: FSMContext):
     analysis = await recognize_food(photo_file)
     await message.answer(analysis)
     send_event("photo_analyzed", user_id, {"target": target, "analysis": analysis})
-
 
 
 if __name__ == '__main__':

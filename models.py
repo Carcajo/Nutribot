@@ -1,9 +1,11 @@
-from sqlalchemy import Column, Integer, String, Text, ARRAY, Float
+from sqlalchemy import Integer, String, Text, ARRAY, Float
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import declarative_base, mapped_column
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from bot.config import settings
+from config import Settings
+
+settings = Settings()
 
 engine = create_engine(settings.DATABASE_URL)
 Session = sessionmaker(bind=engine)
@@ -19,9 +21,9 @@ class User(Base):
     username = mapped_column(String(50))
     target = mapped_column(Text, nullable=True)
 
-    async def save(self, session: AsyncSession):
-        session.add(self)
-        await session.commit()
+    async def save(self, db_session: AsyncSession):
+        db_session.add(self)
+        await db_session.commit()
 
 
 class AdviceVector(Base):

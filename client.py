@@ -1,6 +1,9 @@
+from config import Settings
 import openai
 import aiohttp
-from config import settings
+
+
+settings = Settings()
 
 openai.api_key = settings.OPENAI_API_KEY
 

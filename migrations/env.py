@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from bot import models
+import models
 
 target_metadata = models.Base.metadata
 # this is the Alembic Config object, which provides
