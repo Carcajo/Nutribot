@@ -1,11 +1,9 @@
-from config import Settings
-import openai
+import os
 import aiohttp
-
+from config import Settings
 
 settings = Settings()
-
-openai.api_key = settings.OPENAI_API_KEY
+openai_auth_key = os.environ.get("OPENAI_API_KEY", settings.OPENAI_API_KEY)
 
 
 class AsyncOpenAIClient:
@@ -22,5 +20,6 @@ class AsyncOpenAIClient:
         async with self.session.post(
             "https://api.openai.com/v1/completions",
             json=kwargs,
+            headers={"Authorization": f"Bearer {openai_auth_key}"},
         ) as response:
             return await response.json()

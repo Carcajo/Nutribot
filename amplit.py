@@ -1,9 +1,8 @@
-from config import Settings
-from threading import Thread
 import requests
-import time
+from threading import Thread
 import logging
-
+from config import Settings
+import time
 
 settings = Settings()
 logger = logging.getLogger(__name__)
@@ -46,15 +45,15 @@ class Amplitude:
 client = Amplitude(settings.AMPLITUDE_API_KEY)
 
 
-def send_event(event_type, user_id, event_properties=None):
+def send_event_async(event_type, user_id, event_properties=None):
     event_data = {
         "event_type": event_type,
         "user_id": str(user_id),
         "event_properties": event_properties or {},
     }
 
-    def send_event_async():
+    def send_event():
         client.track(**event_data)
 
-    thread = Thread(target=send_event_async)
+    thread = Thread(target=send_event)
     thread.start()
