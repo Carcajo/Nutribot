@@ -83,12 +83,12 @@ async def process_text_message(openai_thread_id: Optional[str], message: str, go
     async with client.beta.threads.runs.stream(
             thread_id=thread.id,
             assistant_id=ASSISTANT_ID,
-            instructions="Look for information only in the advice.docx file",
+            instructions="Look for information only in the advice.docx file. Do not mention advice.docx file.",
             event_handler=event_handler,
     ) as stream:
         await stream.until_done()
 
-    if event_handler.goal is not None and check_goal(event_handler.goal):
+    if event_handler.goal is not None and await check_goal(event_handler.goal):
         goal = event_handler.goal
 
     return ProcessResponse(event_handler.response or "😊", event_handler.goal or goal, thread.id)
