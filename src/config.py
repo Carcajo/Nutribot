@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     class Config:
         extra = 'ignore'
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+        # env_file = ".env"
+        # env_file_encoding = "utf-8"
 
 SETTINGS = Settings()
