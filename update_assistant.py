@@ -5,7 +5,7 @@ from openai import AssistantEventHandler
 
 client = OpenAI(api_key=dotenv.get_key(".env", key_to_get="OPENAI_API_KEY"))
 
-assistant_id = "asst_hoqPgqhBg8YFBsozHNZu8DhO"
+assistant_id = "asst_muE4XFjEDJJmET3IU87ndb82"
 assistant = client.beta.assistants.retrieve(assistant_id)
 print(assistant.tools)
 print(assistant)

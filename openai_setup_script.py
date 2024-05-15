@@ -20,7 +20,7 @@ file_streams = [open(path, "rb") for path in file_paths]
 
 assistant = client.beta.assistants.create(
     name="sWeightloss assistant",
-    instructions="Answer the nutrition questions using the file_search tool using only the Nutritionist Bot's advice from the advice.docx file, quoting only word for word. Limit yourself to 3 points. Don't mention the advice.docx file. If the question is not related to food, weight loss, weight gain or weight maintenance, then answer it with, 'Sorry, only ask questions on the topic of nutrition'",
+    instructions="Answer the weight loss questions using the file_search tool using only the Nutritionist Bot's advice from the advice.docx file, quoting only word for word. Limit yourself to 3 points.If the question is not related to food, weight loss, weight gain or weight maintenance, then answer it with, Sorry, only ask questions on the topic of nutrition. Answer in Russian.",
     model="gpt-4-turbo",
     tools=[
        {"type": "file_search"},
